@@ -2,7 +2,7 @@
 <img src="https://i.imgur.com/pU5A58S.png" alt="Microsoft Active Directory Logo"/>
 </p>
 
-<h1>On-premises Active Directory Deployed in the Cloud (Azure)</h1>
+<h1>Group Policy and Managing Accounts (Active Directory)</h1>
 In this part of the project I create 10,000 users using a script on PowerShell.<br />
 
 
