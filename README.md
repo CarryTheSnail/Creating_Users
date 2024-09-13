@@ -11,7 +11,7 @@ In this part of the project I create 10,000 users using a script on PowerShell.<
 - Microsoft Azure (Virtual Machines/Compute)
 - Remote Desktop
 - Active Directory Domain Services
-- PowerShell
+- Group Policy Management Console
 
 <h2>Operating Systems Used </h2>
 
@@ -20,89 +20,94 @@ In this part of the project I create 10,000 users using a script on PowerShell.<
 
 <h2>High-Level Deployment and Configuration Steps</h2>
 
-- Step 1: Install Active Directory
-  - Login to DC-1 and install Active Directory Services within Server Manager.
-- Step 2: Promote as a DC: Setup a new forest as mydomain.com. Restart DC-1 and log back in as user: mydomain.com\labuser
-- Step 3: In Active Directory Users and Computers (ADUC), create an Organizational Unit (OU) called "_EMPLOYEES" and "_ADMINS"
-- Step 4: Create a new employee named "Jane Doe" and add the user to the "Domain Admins" Security Group
-- Step 5: Re-login to DC-1 as "mydomain.com\jane_admin"
-- Step 6: Join Client-1 to your domain (mydomain.com). Login to Client-1 as original local admin and join to the domain.
-- Step 7: Login to the Domain Controller and verify Client-1 shows up in ADUC
-- Step 8: Log into Client-1 as mydomain.com\jane_admin and allow “Domain_Users” access to remote desktop. (System Properties -> Remote Desktop)
-- Step 9: Create a bunch of additional users using PowerShell ISE. Attempt to log into client-1 with one of the users. 
+- Part 1: Configure Group Policy to Lockout the accounts after 5 attempts.
+- Part 2: Dealing with Account Lockouts
+- Part 3: Enabling and Disabling Accounts
+- Part 4: Obsering Logs
 
-<h2>Deployment and Configuration Steps</h2>
+<h2>Configure Group Policy to Lockout the account after 5 attempts:</h2>
 
-Step 1: Install Active Directory. Login to DC-1 and install Active Directory Services within Server Manager.
+Step 1: Open Group Policy Management Console (GPMC) 
 
-![image](https://github.com/user-attachments/assets/857cf1b3-2d14-4013-9f0e-781870cfd612)
-![image](https://github.com/user-attachments/assets/09be52bc-a229-4967-9e72-db1afaefb5ea)
+![image](https://github.com/user-attachments/assets/6ca4d725-5a58-48e2-867e-df31490c32c4)
 
-<br />
+![image](https://github.com/user-attachments/assets/34cb3267-f4a8-4c9a-bbf3-1b0470ed7b1e)
 
-Step 2: Promote as a DC: Setup a new forest as mydomain.com. Restart DC-1 and log back in as user: mydomain.com\labuser
+Step 2: Edit a Group Policy Object so that User Accounts are locked after 5 incorrect password attempts. (In this case, I used the Default Domain Policy for mydomains.com. Navigate to the Account Lockout Policy Settings. Configure Account Lockout Policy Settings. (Computer Configuration > Policies > Windows Settings > Security Settings > Account Policies > Account Lockout Policy)
 
-![image](https://github.com/user-attachments/assets/f77fa231-1f9e-4f0d-8376-87f351f1848b)
-![image](https://github.com/user-attachments/assets/74a7ab20-631b-4aa1-b170-5dfb51b064c2)
+![image](https://github.com/user-attachments/assets/c9d11680-ae26-4df8-a1d1-fb53099965a4)
 
-![image](https://github.com/user-attachments/assets/b0aa64c6-c7f7-4b18-8aa8-15d313e7a6aa)
+![image](https://github.com/user-attachments/assets/f2c7b4df-6bb3-4e4d-9405-39bae35ca62d)
 
-<br />
 
-Step 3: In Active Directory Users and Computers (ADUC), create an Organizational Unit (OU) called "_EMPLOYEES" and "_ADMINS"
+Step 3: Update Group Policy: Command Prompt and type gpupdate /force 
+(make sure to use admin user account) 
 
-![image](https://github.com/user-attachments/assets/2b222306-16b2-41e3-98cd-a63763247afd)
-![image](https://github.com/user-attachments/assets/710e13f1-de8d-43d2-a71e-a66e3d68d17e)
-![image](https://github.com/user-attachments/assets/0ab28879-696f-4b9d-aed1-ffbef07ee0e8)
-
-<br />
-
-Step 4: Create a new employee named "Jane Doe" and add the user to the "Domain Admins" Security Group
-
-![image](https://github.com/user-attachments/assets/8e2df14f-77f8-45df-a0e9-c394e70b76ae)
-![image](https://github.com/user-attachments/assets/d8ed1d51-8580-492a-bb28-c69c6e9b0aa8)
-
-<br />
-
-Step 5: Re-login to DC-1 as "mydomain.com\jane_admin"
-
-![image](https://github.com/user-attachments/assets/ec9bb7f8-f082-4f1a-bf48-1f3b2c00cdf5)
-
-<br />
-
-Step 6: Join Client-1 to your domain (mydomain.com). Login to Client-1 as original local admin and join to the domain.
-
-![image](https://github.com/user-attachments/assets/1d9a3a12-1409-48e8-80cd-bc2695727400)
-
-<br />
-
-Step 7: Login to the Domain Controller and verify Client-1 shows up in ADUC
-
-![image](https://github.com/user-attachments/assets/e516d149-0e3d-4feb-8f5b-515420796dcc)
-
-<br />
-
-Step 8: Log into Client-1 as mydomain.com\jane_admin and allow “Domain_Users” access to remote desktop. (System Properties -> Remote Desktop)
-
-![image](https://github.com/user-attachments/assets/2fc3e5fd-0eba-49a2-a178-9389159b7916)
-
-![image](https://github.com/user-attachments/assets/368bbaa6-6846-4009-868a-1b9854b14a52)
+![image](https://github.com/user-attachments/assets/67c01346-7f85-4394-b5b4-b58a855825d5)
 
 
 <br />
 
-Step 9: Create a bunch of additional users using PowerShell ISE. Attempt to log into client-1 with one of the users. 
+<h2>Dealing with Account Lockouts</h2>
 
-![image](https://github.com/user-attachments/assets/862510f5-e2e0-4a1a-835d-f67d58853afe)
+Step 1: Pick a random user account you created previously. Attempt to log in with 6 incorrect password attempts. 
 
-![image](https://github.com/user-attachments/assets/c3b3e96b-b45b-41c6-87b1-cb5de43f3b34)
+![image](https://github.com/user-attachments/assets/9ad67446-b959-4ae9-87d9-612e406cb588)
 
-![image](https://github.com/user-attachments/assets/ec66f7fe-1e02-46ac-bfbe-e56be6306861)
+![image](https://github.com/user-attachments/assets/ca6c879d-d39a-43ad-8bc0-d3cf0c305b13)
 
-![image](https://github.com/user-attachments/assets/8b77bf2c-a593-40ec-aa1b-11cde295c6a2)
-
-![image](https://github.com/user-attachments/assets/3f45afe5-8b48-4e7a-a352-4d00010de2fe)
+![image](https://github.com/user-attachments/assets/43aa6850-4bcb-4022-b58d-ba16ce49bb81)
 
 
+Step 2: Observer that the account is locked out from Active Directory. Unlock the account. Reset Password.
+ 
+![image](https://github.com/user-attachments/assets/d0698797-6b2e-46c2-b00e-c3072e207151)
+
+
+
+Step 3: Attempt to login to the unlocked account. 
+
+![image](https://github.com/user-attachments/assets/becf86f3-8a03-415f-84f4-844bf2f074f7)
+
+![image](https://github.com/user-attachments/assets/3ba76ba6-7b9b-46d4-a0f2-047bd47d616d)
+
+![image](https://github.com/user-attachments/assets/f7bd8bbc-5386-426c-acf2-4a036f95e4cf)
 
 <br />
+
+<h2>Enabling and Disabling Accounts</h2>
+
+Step 1: Search for the account by username in Active Directory
+
+![image](https://github.com/user-attachments/assets/b7bb7f42-51fc-4932-8151-6f551a9cd937)
+
+Step 2: Disable the account in Active Directory
+
+![image](https://github.com/user-attachments/assets/a67dbb94-140b-4589-8cdf-47f090fbcb51)
+
+Step 3: Try logging into the disable user account and observe the error message notifying that the account has been disabled.
+
+![image](https://github.com/user-attachments/assets/960dcd75-a58a-4126-b9bf-1e0b126eeaa5)
+
+Step 4: Enable the disabled account
+
+![image](https://github.com/user-attachments/assets/395494b0-e3d0-4a10-81b5-2409a5958b6f)
+![image](https://github.com/user-attachments/assets/81a23744-e16d-46cd-b48f-6cd3b249364d)
+
+<h2>Observing Logs</h2>
+
+Step 1: Use Event Viewer to observe logs
+
+![image](https://github.com/user-attachments/assets/d76613f2-6e04-4d94-82c2-016f17a5edfc)
+
+Step 2: Search for the user account that was used (fox.civ)
+
+![image](https://github.com/user-attachments/assets/e61921ef-1a3a-44de-99db-2ee9fb8685d8)
+
+Step 3: Observe the Audit Failure from failed login attempts 
+
+![image](https://github.com/user-attachments/assets/27fa6955-1160-4d5a-a707-97f7edb456c6)
+
+
+
+
